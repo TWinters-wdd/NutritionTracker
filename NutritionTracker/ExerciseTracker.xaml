@@ -1,0 +1,353 @@
+﻿<Page x:Class="NutritionTracker.ExerciseTracker"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NutritionTracker"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ExerciseTracker"
+      Background="LightSkyBlue">
+
+    <Page.Resources>
+        <!-- Style for the AddRowButton -->
+        <Style x:Key="GreenCircularButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Background" Value="Green" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="ToolTip" Value="Add Row" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="AddBtnBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                BorderBrush="Navy"
+                                BorderThickness="2">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="AddBtnBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Navy"
+                                                          BlurRadius="8"
+                                                          ShadowDepth="2"
+                                                          Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightGreen" />
+                    <Setter Property="Foreground" Value="Green" />
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style for the Delete Button -->
+        <Style x:Key="RedCircularButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Background" Value="Red" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="ToolTip" Value="Delete Row" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="DeleteBtnBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                BorderBrush="Navy"
+                                BorderThickness="2">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center" />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="DeleteBtnBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Navy"
+                                                          BlurRadius="8"
+                                                          ShadowDepth="2"
+                                                          Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Pink" />
+                    <Setter Property="Foreground" Value="Red" />
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- Style for the Save Button -->
+        <Style x:Key="SaveBtnStyle" TargetType="Button">
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Background" Value="LightCyan"/>
+            <Setter Property="Foreground" Value="Navy"/>
+            <Setter Property="BorderBrush" Value="Navy"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="SaveBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="SaveBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Navy"
+                                                          BlurRadius="8"
+                                                          ShadowDepth="2"
+                                                          Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Navy"/>
+                    <Setter Property="Foreground" Value="LightCyan"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="BorderBrush" Value="LightCyan"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- Style for the ComboBox -->
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="LightCyan"/>
+            <Setter Property="Foreground" Value="Navy"/>
+            <Setter Property="BorderBrush" Value="Navy"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="8,4"/>
+
+            <!-- Rounded border and Toggle button -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="30"/>
+                            </Grid.ColumnDefinitions>
+                            <ToggleButton Grid.ColumnSpan="2"
+                                          Focusable="False"
+                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}"
+                                                x:Name="MainBorder"
+                                                BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}"
+                                                BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}"
+                                                CornerRadius="10">
+
+                                            <!-- Grid to separate the text area from the dropdown arrow -->
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="30"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Custom Dropdown Arrow -->
+                                                <Path Grid.Column="1"
+                                                      Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Data="M 0 0 L 5 5 L 10 0 Z"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                                <Setter TargetName="MainBorder" Property="Effect">
+                                                    <Setter.Value>
+                                                        <DropShadowEffect Color="Navy"
+                                                                          BlurRadius="8"
+                                                                          ShadowDepth="2"
+                                                                          Opacity="0.4"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+
+                            <!-- Text Display Area -->
+                            <ContentPresenter Grid.Column="0"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"
+                                              IsHitTestVisible="False"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
+
+                            <!-- Dropdown List Popup Section -->
+                            <Popup Name="Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Grid Name="DropDown"
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+
+                                    <!-- Container for the list items -->
+                                    <Border Background="White"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="2"
+                                            CornerRadius="0,0,10,10">
+                                        <ScrollViewer SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="20"
+          Height="300"
+          VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    MinWidth="300"
+                    >
+            <Label MinWidth="100"
+                   FontSize="20"
+                   Margin="10,0">Exercises for: </Label>
+            
+            <ComboBox x:Name="ExerciseDayComboBox" Width="Auto"
+                      SelectedIndex="0"
+                      Style="{StaticResource ComboBoxStyle}"
+                      SelectionChanged="ExerciseDayComboBox_SelectionChanged"
+                      FontSize="20">
+                
+                <ComboBoxItem>Monday</ComboBoxItem>
+                <ComboBoxItem>Tuesday</ComboBoxItem>
+                <ComboBoxItem>Wednesday</ComboBoxItem>
+                <ComboBoxItem>Thursday</ComboBoxItem>
+                <ComboBoxItem>Friday</ComboBoxItem>
+                <ComboBoxItem>Saturday</ComboBoxItem>
+                <ComboBoxItem>Sunday</ComboBoxItem>
+                
+            </ComboBox>
+        </StackPanel>
+
+        <DataGrid x:Name="ExerciseDataGrid"
+                  Grid.Row="1"
+                  Grid.Column="0"
+                  HeadersVisibility="Column"
+                  Margin="50,50,10,50"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  Background="LightCyan">
+
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="FontSize" Value="20" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Exercise Name"
+                                    Binding="{Binding ExerciseName}"
+                                    Width="1*" />
+
+                <DataGridTextColumn Header="Reps/Duration"
+                                    Binding="{Binding Reps}"
+                                    Width="1*" />
+
+                <DataGridTextColumn Header="Sets"
+                                    Binding="{Binding Sets}"
+                                    Width="1*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="1" Grid.Column="1" Width="60"
+              Margin="0,50">
+            <Button Content="+"
+                    Style="{StaticResource GreenCircularButtonStyle}"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    Click="AddButton_Click"/>
+
+            <Button Content="-"
+                    Style="{StaticResource RedCircularButtonStyle}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    Click="SubtractButton_Click"/>
+
+            <Button Content="Save"
+                    Style="{StaticResource SaveBtnStyle}"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Stretch"
+                    Click="SaveButton_Click"/>
+
+        </Grid>
+        
+    </Grid>
+</Page>

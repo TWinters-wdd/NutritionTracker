@@ -1,0 +1,163 @@
+﻿<Page x:Class="NutritionTracker.AppSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NutritionTracker"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AppSettings"
+      Background="Transparent">
+
+    <Page.Resources>
+        <Style x:Key="CustomExpanderToggle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Expander}}}"
+                                SnapsToDevicePixels="True"
+                                Padding="{TemplateBinding Padding}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="ArrowTextBlock"
+                                           Text=">"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           RenderTransformOrigin="0.5,0.5">
+                                    <TextBlock.RenderTransform>
+                                        <RotateTransform Angle="0"/>
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+
+                                <ContentPresenter Margin="15,0,0,0"
+                                                  RecognizesAccessKey="True"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                  VerticalAlignment="Center">
+                                    <ContentPresenter.Resources>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Expander}}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="ArrowTextBlock" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="90" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernExpander" TargetType="{x:Type Expander}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Expander}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition x:Name="ContentRow" Height="0" />
+                            </Grid.RowDefinitions>
+
+                            <ToggleButton Grid.Row="0"
+                                          Style="{StaticResource CustomExpanderToggle}"
+                                          IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Content="{TemplateBinding Header}"
+                                          Background="{TemplateBinding Background}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          FontSize="{TemplateBinding FontSize}"
+                                          Padding="{TemplateBinding Padding}" />
+
+                            <Border x:Name="ExpandSite"
+                                    Grid.Row="1"
+                                    Visibility="Collapsed"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter Margin="{TemplateBinding Padding}" />
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="True">
+                                <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="ContentRow" Property="Height" Value="1*" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   FontSize="30"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center">Text Placeholder</TextBlock>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   FontSize="30"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center">Text Placeholder</TextBlock>
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   FontSize="30"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center">Text Placeholder</TextBlock>
+
+        <Expander x:Name="imgAttribution"
+                  Style="{StaticResource ModernExpander}"
+                  Background="Navy"
+                  Foreground="White"
+                  FontSize="30"
+                  Margin="50, 30"
+                  ExpandDirection="Down"
+                  IsExpanded="False"
+                  Grid.Row="3"
+                  Grid.Column="0">
+            <Expander.Header>
+                <TextBlock>Attributions</TextBlock>
+            </Expander.Header>
+            <FlowDocumentScrollViewer MaxHeight="250" VerticalScrollBarVisibility="Hidden">
+                <FlowDocument x:Name="attributionContainer">
+                    <List MarkerStyle="Disc"
+                          x:Name="attributionList"
+                          FontSize="20"
+                          >
+                        <ListItem>
+                            <Paragraph FontSize="22">Gear Icon: Made by Freepik from www.flaticon.com.</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph FontSize="22">Weight Icon: Made by Freepik from www.flaticon.com.</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph FontSize="22">Trophy Icon: Made by Freepik from www.flaticon.com.</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph FontSize="22">Salad Bowl Icon: Made by juicy_fish from www.flaticon.com.</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph FontSize="22">Database Used (Food Data Central):</Paragraph>
+                            <Paragraph FontSize="22">https://www.kaggle.com/datasets/demomaster/usda-national-nutrient-database/data</Paragraph>
+                        </ListItem>
+                    </List>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>
+        </Expander>
+    </Grid>
+</Page>
