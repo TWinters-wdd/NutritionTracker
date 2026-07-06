@@ -96,6 +96,9 @@
     <Compile Include="AppSettings.xaml.cs">
       <DependentUpon>AppSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Goal.cs" />
+    <Compile Include="Classes\Player.cs" />
+    <Compile Include="Classes\Race.cs" />
     <Compile Include="ExerciseTracker.xaml.cs">
       <DependentUpon>ExerciseTracker.xaml</DependentUpon>
     </Compile>
