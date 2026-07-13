@@ -99,6 +99,7 @@
     <Compile Include="Classes\Goal.cs" />
     <Compile Include="Classes\Player.cs" />
     <Compile Include="Classes\Race.cs" />
+    <Compile Include="Classes\TextBoxHelper.cs" />
     <Compile Include="ExerciseTracker.xaml.cs">
       <DependentUpon>ExerciseTracker.xaml</DependentUpon>
     </Compile>

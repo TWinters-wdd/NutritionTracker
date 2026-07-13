@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using LiveChartsCore.SkiaSharpView.WPF;
 using LiveChartsCore;
 using System.Linq;
 using LiveChartsCore.SkiaSharpView;
@@ -91,9 +92,15 @@ namespace NutritionTracker
                     // Dapper automatically takes the properties from latestEntry and injects them into the '@' variables
                     string insertQuery = @"
                         INSERT INTO FoodEntries (Date, Foodname, CaloriesPerServing, TotalServings)
-                        VALUES (@Date, @FoodName, @CaloriesPerServing, @TotalServings);";
+                        VALUES (@Date, @FoodName, @CaloriesPerServing, @TotalServings);
 
-                    connection.Execute(insertQuery, latestEntry);
+                        SELECT last_insert_rowid();";
+
+                    // returns the new ID of the row
+                    int newDbId = connection.ExecuteScalar<int>(insertQuery, latestEntry);
+
+                    // updates the C# object to match the database
+                    latestEntry.Id = newDbId;
                 }
             }
             catch (Exception ex)
@@ -111,7 +118,7 @@ namespace NutritionTracker
                     connection.Open();
 
                     // SQL command that fetches every row out of the table
-                    string selectQuery = "SELECT Date, FoodName, CaloriesPerServing, TotalServings FROM FoodEntries;";
+                    string selectQuery = "SELECT Id, Date, FoodName, CaloriesPerServing, TotalServings FROM FoodEntries;";
 
                     // Dapper then reads the database columns and turns them back into a List of DailyEntry objects
                     var loadedEntries = connection.Query<DailyEntry>(selectQuery).ToList();
@@ -129,14 +136,55 @@ namespace NutritionTracker
             }
         }
 
-        public class DailyEntry
+        public class DailyEntry : INotifyPropertyChanged
         {
-            public string Date { get; set; }
-            public string FoodName { get; set; } = string.Empty;
-            public double CaloriesPerServing { get; set; }
-            public double TotalServings { get; set; }
+            private double _caloriesPerServing;
+            private double _totalServings;
+            private string _foodName = string.Empty;
+            private string _date;
 
+            public int Id { get; set; }
+
+            public string Date
+            {
+                get { return _date; }
+                set { _date = value; OnPropertyChanged(); }
+            }
+
+            public string FoodName
+            {
+                get { return _foodName; }
+                set { _foodName = value; OnPropertyChanged(); }
+            }
+
+            public double CaloriesPerServing
+            {
+                get { return _caloriesPerServing; }
+                set
+                {
+                    _caloriesPerServing = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalCalories)); // Updates the total
+                }
+            }
+
+            public double TotalServings
+            {
+                get { return _totalServings; }
+                set
+                {
+                    _totalServings = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalCalories)); // Updates the total
+                }
+            }
             public double TotalCalories => CaloriesPerServing * TotalServings;
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged([CallerMemberName] string name = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
         }
 
         public void UpdateChart()
@@ -178,6 +226,49 @@ namespace NutritionTracker
         private void FilteredDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateDataGridBySelectedDate();
+        }
+
+        // Method that updates the Pie Chart and Database after user hits Enter when editing a DataGrid cell
+        private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            if (e.EditAction == DataGridEditAction.Commit)
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (e.Row.Item is DailyEntry editedEntry)
+                    {
+                        UpdateDatabaseRecord(editedEntry);
+                        UpdateChart();
+                    }
+                }), System.Windows.Threading.DispatcherPriority.Background);
+            }
+        }
+
+        // Updates SQLite database
+        private void UpdateDatabaseRecord(DailyEntry entry)
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    // SQL command to update the row based on specific ID
+                    string updateQuery = @"
+                        UPDATE FoodEntries
+                        SET Date = @Date,
+                            FoodName = @FoodName,
+                            CaloriesPerServing = @CaloriesPerServing,
+                            TotalServings = @TotalServings
+                        WHERE Id = @Id;";
+
+                    connection.Execute(updateQuery, entry);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database Update error: {ex.Message}");
+            }
         }
     }
 }

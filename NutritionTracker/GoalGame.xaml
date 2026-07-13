@@ -5,15 +5,43 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:NutritionTracker"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="GoalGame" Background="White">
-
+      d:DesignHeight="900" d:DesignWidth="800"
+      Title="GoalGame" Background="LightSkyBlue">
     <Grid>
-        <TextBlock FontSize="30" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"
-                   >
-            Goal Game Code
-        </TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Code for displaying your horse on left side of page -->
+        <StackPanel Grid.Column="0"
+                    Grid.Row="0"
+                    VerticalAlignment="Center">
+            <Label FontSize="24"
+                   HorizontalAlignment="Center">Your Horse: </Label>
+            <TextBlock HorizontalAlignment="Center"
+                       FontSize="24">Placeholder for Horse Image.</TextBlock>
+        </StackPanel>
+        
+        <!-- Code for the Create Race and Join Race Buttons -->
+        <StackPanel Grid.Column="1"
+                    Grid.Row="0"
+                    VerticalAlignment="Center">
+            <Button HorizontalAlignment="Center"
+                    Padding="10"
+                    FontSize="24">Create New Race</Button>
+
+            <Label FontSize="24"
+                   HorizontalAlignment="Center">Join Existing Race: </Label>
+            <TextBox HorizontalAlignment="Center"></TextBox>
+        </StackPanel>
+        
+        <ScrollBar Grid.Column="1"
+                   Grid.RowSpan="2"
+                   HorizontalAlignment="Right"></ScrollBar>
     </Grid>
 </Page>

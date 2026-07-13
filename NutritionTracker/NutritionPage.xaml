@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:NutritionTracker"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         Title="NutritionTracker"
@@ -29,7 +29,6 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-
                                     <Setter TargetName="border" Property="Background" Value="LightBlue" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
@@ -46,14 +45,24 @@
                             <Grid>
                                 <ScrollViewer x:Name="PART_ContentHost"
                                               Margin="0"
-                                              VerticalAlignment="Center" />
-                                <ContentControl x:Name="PART_Watermark"
+                                              VerticalAlignment="Center" 
+                                              HorizontalAlignment="Stretch"/>
+
+                                <ContentControl x:Name="CustomWatermark"
                                                 Foreground="Navy"
+                                                Content="Filter By Date: "
+                                                Opacity="0.4"
                                                 Focusable="False"
                                                 IsHitTestVisible="False"
                                                 Visibility="Collapsed"
                                                 VerticalAlignment="Center"/>
                             </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter TargetName="CustomWatermark" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -75,9 +84,9 @@
                                     </Grid.ColumnDefinitions>
 
                                     <DatePickerTextBox x:Name="PART_TextBox"
+                                                       Width="200"
                                                        Grid.Column="0"
                                                        Style="{StaticResource RemoveWhiteBorderDBoxStyle}"
-                                                       Text="Filter by Date"
                                                        Background="Transparent"
                                                        VerticalAlignment="Center"
                                                        HorizontalAlignment="Stretch"
@@ -87,6 +96,7 @@
                                     <Button x:Name="PART_Button"
                                             Grid.Column="1"
                                             Width="35"
+                                            Cursor="Hand"
                                             Background="Transparent"
                                             BorderThickness="0">
                                         <TextBlock Text="🗓️"
@@ -131,7 +141,6 @@
                     FontSize="30"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
-                    Cursor="Hand"
                     SelectedDateChanged="FilteredDate_SelectedDateChanged"
                     Margin="0,10,5,10">
             <DatePicker.Resources>
@@ -142,10 +151,6 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-
-                <Style TargetType="{x:Type DatePickerTextBox}">
-                    <Setter Property="Text" Value="Filter by Date"/>
-                </Style>
             </DatePicker.Resources>
         </DatePicker>
 
@@ -154,6 +159,7 @@
                   Grid.Column="0"
                   AlternatingRowBackground="DodgerBlue"
                   ColumnWidth="*"
+                  CellEditEnding="DataGrid_CellEditEnding"
                   AutoGenerateColumns="False"
                   CanUserSortColumns="False"
                   CanUserAddRows="False"
@@ -197,8 +203,9 @@
                                     Width="Auto" />
 
                 <DataGridTextColumn Header="Total Calories"
-                                    Binding="{Binding TotalCalories}"
-                                    Width="1*" />
+                                    Binding="{Binding TotalCalories, Mode=OneWay}"
+                                    Width="1*"
+                                    IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
 
